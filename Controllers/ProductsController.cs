@@ -173,7 +173,6 @@ namespace MiniECommerceStore.Controllers
             return View(product);
         }
 
-        // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -181,19 +180,27 @@ namespace MiniECommerceStore.Controllers
             var product = await _context.Products.FindAsync(id);
             if (product != null)
             {
-                // Delete image file
+                // Delete product image
                 if (!string.IsNullOrEmpty(product.ImageFileName))
                 {
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/products", product.ImageFileName);
-                    if (System.IO.File.Exists(filePath)) System.IO.File.Delete(filePath);
+                    if (System.IO.File.Exists(filePath))
+                        System.IO.File.Delete(filePath);
                 }
 
                 _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(); // cascades to BasketItems, OrderItems, Reviews
             }
 
+            TempData["Success"] = "Product and all related data deleted successfully!";
             return RedirectToAction(nameof(Index));
         }
+
+
+
+
+
+
 
         private bool ProductExists(int id)
         {

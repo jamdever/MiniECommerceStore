@@ -34,3 +34,18 @@
         });
     });
 });
+    let lastScrollTop = 0;
+const navbar = document.getElementById("mainNavbar");
+const navbarHeight = navbar.offsetHeight;
+
+window.addEventListener("scroll", function () {
+    if (window.scrollY > 0) {
+        // Hide navbar when not at top
+        navbar.style.top = `-${navbarHeight}px`;
+    } else {
+        // Show navbar only at the very top
+        navbar.style.top = "0";
+    }
+});
+
+

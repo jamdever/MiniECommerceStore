@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 namespace MiniECommerceStore.Models
 {
     public class AppDbContext : DbContext
@@ -31,42 +32,42 @@ namespace MiniECommerceStore.Models
                 .WithMany(r => r.UserRoles)
                 .HasForeignKey(ur => ur.RoleID);
 
-            // Product -> Category relationship
+            // Product -> Category
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryID)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent deleting category if products exist
+                .OnDelete(DeleteBehavior.Restrict); // keep categories protected
 
-            // Order -> User relationship
+            // Order -> User
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.User)
                 .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserID)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent deleting user if orders exist
+                .OnDelete(DeleteBehavior.Restrict);
 
-            // Order -> OrderItem relationship
+            // Order -> OrderItem
             modelBuilder.Entity<Order>()
                 .HasMany(o => o.Items)
                 .WithOne(oi => oi.Order)
                 .HasForeignKey(oi => oi.OrderID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // OrderItem -> Product relationship
+            // OrderItem -> Product (cascade delete)
             modelBuilder.Entity<OrderItem>()
                 .HasOne(oi => oi.Product)
                 .WithMany()
                 .HasForeignKey(oi => oi.ProductID)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent deleting product if in orders
+                .OnDelete(DeleteBehavior.Cascade); // deleting product deletes related OrderItems
 
-            // Basket -> User relationship
+            // Basket -> User
             modelBuilder.Entity<Basket>()
                 .HasOne(b => b.User)
                 .WithMany(u => u.Baskets)
                 .HasForeignKey(b => b.UserID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Basket -> BasketItem relationship
+            // Basket -> BasketItem
             modelBuilder.Entity<Basket>()
                 .HasMany(b => b.Items)
                 .WithOne(bi => bi.Basket)
@@ -78,76 +79,32 @@ namespace MiniECommerceStore.Models
                 .HasOne(bi => bi.Product)
                 .WithMany()
                 .HasForeignKey(bi => bi.ProductID)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent deleting product if in baskets
+                .OnDelete(DeleteBehavior.Cascade); // now deleting product deletes related BasketItems
 
-            // Review -> Product relationship
+
+            // Review -> Product
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.Product)
                 .WithMany(p => p.Reviews)
                 .HasForeignKey(r => r.ProductID)
-                .OnDelete(DeleteBehavior.Cascade); // Delete reviews when product is deleted
+                .OnDelete(DeleteBehavior.Cascade); // deleting product deletes related reviews
 
-            // Review -> User relationship
-            modelBuilder.Entity<Review>()
-                .HasOne(r => r.User)
-                .WithMany(u => u.Reviews)
-                .HasForeignKey(r => r.UserID)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent deleting user if reviews exist
+            // Decimal precision
+            modelBuilder.Entity<Product>().Property(p => p.Price).HasColumnType("decimal(18,2)");
+            modelBuilder.Entity<OrderItem>().Property(oi => oi.Price).HasColumnType("decimal(18,2)");
+            modelBuilder.Entity<Order>().Property(o => o.Total).HasColumnType("decimal(18,2)");
 
-            // Decimal precision for Price fields
-            modelBuilder.Entity<Product>()
-                .Property(p => p.Price)
-                .HasColumnType("decimal(18,2)");
+            // String constraints
+            modelBuilder.Entity<Product>().Property(p => p.Name).HasMaxLength(200).IsRequired();
+            modelBuilder.Entity<Category>().Property(c => c.CategoryName).HasMaxLength(100).IsRequired();
+            modelBuilder.Entity<User>().Property(u => u.Username).HasMaxLength(50).IsRequired();
+            modelBuilder.Entity<User>().Property(u => u.Email).HasMaxLength(100).IsRequired();
 
-            modelBuilder.Entity<OrderItem>()
-                .Property(oi => oi.Price)
-                .HasColumnType("decimal(18,2)");
-
-            modelBuilder.Entity<Order>()
-                .Property(o => o.Total)
-                .HasColumnType("decimal(18,2)");
-
-            // String length constraints
-            modelBuilder.Entity<Product>()
-                .Property(p => p.Name)
-                .HasMaxLength(200)
-                .IsRequired();
-
-            modelBuilder.Entity<Category>()
-                .Property(c => c.CategoryName)
-                .HasMaxLength(100)
-                .IsRequired();
-
-            modelBuilder.Entity<User>()
-                .Property(u => u.Username)
-                .HasMaxLength(50)
-                .IsRequired();
-
-            modelBuilder.Entity<User>()
-                .Property(u => u.Email)
-                .HasMaxLength(100)
-                .IsRequired();
-
-            // Indexes for better performance
-            modelBuilder.Entity<Product>()
-                .HasIndex(p => p.Name);
-
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Username)
-                .IsUnique();
-
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Email)
-                .IsUnique();
-
-            modelBuilder.Entity<Order>()
-                .HasIndex(o => o.PublicOrderID)
-                .IsUnique();
-
-            modelBuilder.Entity<User>()
-    .Property(u => u.ShippingAddressLine1)
-    .HasColumnName("ShippingAddressLine1");
-
+            // Indexes
+            modelBuilder.Entity<Product>().HasIndex(p => p.Name);
+            modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
+            modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+            modelBuilder.Entity<Order>().HasIndex(o => o.PublicOrderID).IsUnique();
         }
     }
 }

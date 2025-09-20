@@ -381,7 +381,7 @@ namespace Mini_E_Commerce_Store.Migrations
                     b.HasOne("MiniECommerceStore.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");
@@ -411,7 +411,7 @@ namespace Mini_E_Commerce_Store.Migrations
                     b.HasOne("MiniECommerceStore.Models.User", "User")
                         .WithMany("Reviews")
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");

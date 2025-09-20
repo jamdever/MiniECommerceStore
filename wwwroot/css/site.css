@@ -1,22 +1,143 @@
-html {
-  font-size: 14px;
+/* Navbar fully transparent */
+.custom-navbar {
+    background: rgba(0, 0, 0, 0); /* fully transparent */
+    border: none;
+    box-shadow: none;
+    z-index: 10;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+/* Make navbar stick to top */
+.fixed-top {
+    position: fixed;
+    top: 0;
+    width: 100%;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.navbar-brand {
+    font-size: 2rem;
+    font-weight: bold;
+    color: white !important;
+    text-align: center;
+    position: relative;
+    left: -40px; /* positive to move right, negative to move left */
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+/* Nav links */
+.navbar-nav .nav-link {
+    color: white !important;
+    margin: 0 15px;
+    font-size: 1.1rem;
+    transition: color 0.2s ease-in-out;
+    left: -100px;
 }
 
-body {
-  margin-bottom: 60px;
+    .navbar-nav .nav-link:hover {
+        color: #ffcc00 !important;
+    }
+
+/* Hero Section */
+.hero {
+    background: url('/images/Backround.jpg') no-repeat center center;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center; /* vertical center */
+    align-items: center; /* horizontal center */
+    color: white;
+    position: relative;
+    margin-top: 0px; /* height of navbar to avoid overlap */
+}
+
+    .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.2); /* overlay for readability */
+        z-index: 1;
+    }
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+/* Rose gold button */
+.btn-rosegold {
+    background: #caa98a; /* Rose gold color */
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+    .btn-rosegold:hover {
+        background: #caa98a; /* lighter rose-gold on hover */
+        color: white;
+        transform: translateY(-2px);
+    }
+
+/* Cart number badge in rose gold */
+.basket-count {
+    background-color: #caa98a !important;
+    color: white !important;
+    font-weight: bold;
+    min-width: 25px;
+    height: 25px;
+    padding: 0 6px;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+/* Footer */
+.site-footer {
+    background: white; /* white background */
+    color: black; /* default text color */
+    width: 100%;
+    bottom: 0;
+    left: 0;
+}
+
+    .site-footer a.footer-link {
+        color: #caa98a; /* rose gold link color */
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+        .site-footer a.footer-link:hover {
+            color: #b76e79; /* darker rose gold on hover */
+            text-decoration: underline;
+        }
+
+    .site-footer .social-icons a {
+        color: #caa98a; /* rose gold icons */
+        font-size: 1.2rem;
+        transition: color 0.3s;
+    }
+
+        .site-footer .social-icons a:hover {
+            color: #b76e79;
+        }
+
+    .site-footer h5, .site-footer p {
+        color: black; /* headings and text black */
+    }
+
+    .site-footer .border-top {
+        border-color: #ddd; /* subtle border line */
+    }
+
+/* Navbar scroll transition */
+#mainNavbar {
+    transition: top 0.3s ease-in-out;
 }

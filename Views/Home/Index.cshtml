@@ -5,23 +5,15 @@
     var searchString = Context.Request.Query["searchString"].ToString();
 }
 
-<h2>Featured Products</h2>
+<h2 class="text-center mb-5 mt-5">Featured Products</h2> <!-- Added top margin mt-5 -->
 
-<!-- Search Form -->
-<form method="get" asp-action="Index" class="mb-4">
-    <div class="input-group">
-        <input type="text" name="searchString" class="form-control" placeholder="Search products..." value="@searchString" />
-        <button class="btn btn-primary" type="submit">Search</button>
-    </div>
-</form>
-
-<div class="row">
+<div class="row justify-content-center pt-3">
     @foreach (var product in Model)
     {
-        <div class="col-md-3 mb-3">
-            <a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductID" class="text-decoration-none text-dark">
-                <div class="card h-100">
-                    <!-- ✅ Product Image -->
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4 d-flex align-items-stretch">
+            <a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductID" class="text-decoration-none text-dark w-100">
+                <div class="card h-100 text-center">
+                    <!-- Product Image -->
                     @if (!string.IsNullOrEmpty(product.ImageFileName))
                     {
                         <img src="~/images/products/@product.ImageFileName" class="card-img-top" alt="@product.Name" style="height:200px; object-fit:cover;" />
@@ -36,7 +28,7 @@
                         <p class="card-text"><strong>Price:</strong> $@product.Price</p>
                         <p class="card-text text-truncate">@product.Description</p>
 
-                        <!-- ⭐ Average Rating -->
+                        <!-- Average Rating -->
                         @{
                             var avgRating = product.Reviews != null && product.Reviews.Any()
                             ? product.Reviews.Average(r => r.Rating)
@@ -61,4 +53,18 @@
             </a>
         </div>
     }
+</div>
+
+<div class="video-banner position-relative text-center">
+    <video autoplay muted loop playsinline class="w-100" style="max-height: 500px; object-fit: cover;">
+        <source src="~/images/mainvideo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Overlay content -->
+    <div class="video-overlay position-absolute top-50 start-50 translate-middle text-white">
+        <h1>Welcome to Our Store</h1>
+        <p>Discover the latest products now</p>
+        <a asp-controller="Products" asp-action="Index" class="btn btn-rosegold mt-3">View All Products</a>
+    </div>
 </div>
