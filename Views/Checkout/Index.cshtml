@@ -1,0 +1,44 @@
+﻿@model List<MiniECommerceStore.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Checkout";
+    var user = ViewBag.User as MiniECommerceStore.Models.User;
+}
+
+<h2>Checkout</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+
+<form asp-action="PlaceOrder" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label>Address Line 1</label>
+        <input name="shippingAddressLine1" class="form-control" value="@user?.ShippingAddressLine1" required />
+    </div>
+    <div class="mb-3">
+        <label>Address Line 2</label>
+        <input name="shippingAddressLine2" class="form-control" value="@user?.ShippingAddressLine2" />
+    </div>
+    <div class="mb-3">
+        <label>City</label>
+        <input name="shippingCity" class="form-control" value="@user?.ShippingCity" required />
+    </div>
+    <div class="mb-3">
+        <label>State</label>
+        <input name="shippingState" class="form-control" value="@user?.ShippingState" />
+    </div>
+    <div class="mb-3">
+        <label>Postal Code</label>
+        <input name="shippingPostalCode" class="form-control" value="@user?.ShippingPostalCode" required />
+    </div>
+    <div class="mb-3">
+        <label>Country</label>
+        <input name="shippingCountry" class="form-control" value="@user?.ShippingCountry" required />
+    </div>
+
+    <button type="submit" class="btn btn-success">Place Order</button>
+</form>

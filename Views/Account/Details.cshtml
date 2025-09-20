@@ -1,0 +1,32 @@
+﻿@model MiniECommerceStore.Models.User
+@{
+    ViewData["Title"] = "My Account";
+}
+
+<h2>My Account</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="card p-3 mb-3">
+    <p><strong>Username:</strong> @Model.Username</p>
+    <p><strong>Email:</strong> @Model.Email</p>
+</div>
+
+<h4>Shipping Address</h4>
+<div class="card p-3">
+    <p><strong>Address Line 1:</strong> @Model.ShippingAddressLine1</p>
+    <p><strong>Address Line 2:</strong> @Model.ShippingAddressLine2</p>
+    <p><strong>City:</strong> @Model.ShippingCity</p>
+    <p><strong>State:</strong> @Model.ShippingState</p>
+    <p><strong>Postal Code:</strong> @Model.ShippingPostalCode</p>
+    <p><strong>Country:</strong> @Model.ShippingCountry</p>
+</div>
+
+<a asp-action="Edit" class="btn btn-primary mt-3">Edit Account</a>

@@ -1,0 +1,67 @@
+﻿@model IEnumerable<MiniECommerceStore.Models.Product>
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h1>Products</h1>
+
+<!-- ✅ Search Form -->
+<form asp-action="Index" method="get" class="form-inline mb-3">
+    <input type="text" name="searchString" value="@ViewBag.CurrentFilter"
+           class="form-control mr-2" placeholder="Search products..." />
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.Description)</th>
+            <th>@Html.DisplayNameFor(model => model.Price)</th>
+            <th>@Html.DisplayNameFor(model => model.Stock)</th>
+            <th>@Html.DisplayNameFor(model => model.Category)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImageFileName))
+                    {
+                        <img src="~/images/products/@item.ImageFileName" alt="@item.Name" style="height:60px; width:60px; object-fit:cover;" />
+                    }
+                    else
+                    {
+                        <img src="~/images/products/default.png" alt="No Image" style="height:60px; width:60px; object-fit:cover;" />
+                    }
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                <td>@item.Price.ToString("C")</td>
+                <td>@Html.DisplayFor(modelItem => item.Stock)</td>
+                <td>@item.Category?.CategoryName</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ProductID" class="btn btn-warning btn-sm">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ProductID" class="btn btn-info btn-sm">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ProductID" class="btn btn-danger btn-sm">Delete</a> |
+                    <a asp-controller="Basket"
+                       asp-action="Add"
+                       asp-route-productId="@item.ProductID"
+                       asp-route-name="@item.Name"
+                       asp-route-price="@item.Price"
+                       class="btn btn-success btn-sm">
+                        Add to Basket
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

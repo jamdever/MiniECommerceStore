@@ -1,0 +1,54 @@
+﻿@model MiniECommerceStore.Models.User
+@{
+    ViewData["Title"] = "Edit Account";
+}
+
+<h2>Edit Account</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label>Username</label>
+        <input asp-for="Username" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input asp-for="Email" type="email" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Password (leave blank to keep current)</label>
+        <input asp-for="Password" type="password" class="form-control" />
+    </div>
+
+    <h4>Shipping Address</h4>
+    <div class="mb-3">
+        <label>Address Line 1</label>
+        <input asp-for="ShippingAddressLine1" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Address Line 2</label>
+        <input asp-for="ShippingAddressLine2" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>City</label>
+        <input asp-for="ShippingCity" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>State</label>
+        <input asp-for="ShippingState" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Postal Code</label>
+        <input asp-for="ShippingPostalCode" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Country</label>
+        <input asp-for="ShippingCountry" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Save Changes</button>
+    <a asp-action="Details" class="btn btn-secondary">Cancel</a>
+</form>

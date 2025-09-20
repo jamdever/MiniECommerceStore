@@ -1,0 +1,40 @@
+﻿@model List<MiniECommerceStore.Models.Order>
+@{
+    ViewData["Title"] = "My Orders";
+}
+<h2>My Orders</h2>
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        <p>You have not placed any orders yet.</p>
+        <a asp-controller="Products" asp-action="Index" class="btn btn-primary">Start Shopping</a>
+    </div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Items</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.OrderID</td>
+                    <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@order.Total.ToString("C")</td>
+                    <td>@order.Items.Sum(i => i.Quantity)</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@order.OrderID" class="btn btn-sm btn-primary">View</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

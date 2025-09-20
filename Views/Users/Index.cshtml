@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MiniECommerceStore.Models.User>
+
+<h2>Manage Users</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>UserID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserID</td>
+                <td>@user.Username</td>
+                <td>@user.Email</td>
+                <td>
+                    @if (user.UserRoles.Any())
+                    {
+                        @string.Join(", ", user.UserRoles.Select(ur => ur.Role.RoleName))
+                    }
+                    else
+                    {
+                        <span class="text-muted">No roles</span>
+                    }
+                </td>
+                <td>@(user.IsActive ? "Active" : "Deactivated")</td>
+                <td>
+                    @if (user.IsActive)
+                    {
+                        <form asp-action="Deactivate" asp-route-id="@user.UserID" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-danger">Deactivate</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-action="Activate" asp-route-id="@user.UserID" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-success">Activate</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

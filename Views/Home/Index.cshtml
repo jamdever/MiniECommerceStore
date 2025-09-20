@@ -1,0 +1,64 @@
+﻿@model IEnumerable<MiniECommerceStore.Models.Product>
+
+@{
+    ViewData["Title"] = "Home";
+    var searchString = Context.Request.Query["searchString"].ToString();
+}
+
+<h2>Featured Products</h2>
+
+<!-- Search Form -->
+<form method="get" asp-action="Index" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="searchString" class="form-control" placeholder="Search products..." value="@searchString" />
+        <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+</form>
+
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-md-3 mb-3">
+            <a asp-controller="Products" asp-action="Details" asp-route-id="@product.ProductID" class="text-decoration-none text-dark">
+                <div class="card h-100">
+                    <!-- ✅ Product Image -->
+                    @if (!string.IsNullOrEmpty(product.ImageFileName))
+                    {
+                        <img src="~/images/products/@product.ImageFileName" class="card-img-top" alt="@product.Name" style="height:200px; object-fit:cover;" />
+                    }
+                    else
+                    {
+                        <img src="~/images/products/default.png" class="card-img-top" alt="No Image" style="height:200px; object-fit:cover;" />
+                    }
+
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text"><strong>Price:</strong> $@product.Price</p>
+                        <p class="card-text text-truncate">@product.Description</p>
+
+                        <!-- ⭐ Average Rating -->
+                        @{
+                            var avgRating = product.Reviews != null && product.Reviews.Any()
+                            ? product.Reviews.Average(r => r.Rating)
+                            : 0;
+                        }
+                        <p class="mb-0">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= Math.Round(avgRating))
+                                {
+                                    <span class="text-warning">★</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">☆</span>
+                                }
+                            }
+                            <small>(@avgRating.ToString("0.0"))</small>
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+</div>

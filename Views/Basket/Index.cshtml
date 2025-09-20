@@ -1,0 +1,58 @@
+﻿@model List<MiniECommerceStore.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Your Basket";
+}
+
+<h2>Your Basket</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>Your basket is empty.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>@item.Quantity</td>
+                    <td>@(item.Price* item.Quantity).ToString("C")</td>
+                    <td>
+                        <form asp-action="Decrement" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="productId" value="@item.ProductID" />
+                            <button type="submit" class="btn btn-sm btn-warning">-</button>
+                        </form>
+
+                        <span class="mx-1">@item.Quantity</span>
+
+                        <form asp-action="Increment" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="productId" value="@item.ProductID" />
+                            <button type="submit" class="btn btn-sm btn-success">+</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h4>Grand Total: @Model.Sum(i => i.Price * i.Quantity).ToString("C")</h4>
+
+    <div class="mt-3">
+        <a asp-controller="Checkout" asp-action="Index" class="btn btn-success">Proceed to Checkout</a>
+    </div>
+}
